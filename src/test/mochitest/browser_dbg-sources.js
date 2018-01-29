@@ -58,20 +58,4 @@ add_task(async function() {
 
   await waitForSourceCount(dbg, 9);
   is(getLabel(dbg, 7), "math.min.js", "The dynamic script exists");
-
-  // Make sure named eval sources appear in the list.
-});
-
-add_task(async function() {
-  const dbg = await initDebugger("doc-sources.html");
-  const { selectors: { getSelectedSource }, getState } = dbg;
-
-  await waitForSources(dbg, "simple1", "simple2", "nested-source", "long.js");
-
-  ContentTask.spawn(gBrowser.selectedBrowser, null, function() {
-    content.eval("window.evaledFunc = function() {} //# sourceURL=evaled.js");
-  });
-  await waitForSourceCount(dbg, 3);
-
-  is(getLabel(dbg, 3), "evaled.js", "the eval script exists");
 });
